@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    {{review[2]}}
+{% endblock %}
+
+{% block main %}
+
+<article class="container-fluid p-3 mb-2 bg-dark text-white">
+    <div class="row"><div class="col"><h1>{{review[2]}}</h1></div>
+    <div class="col">{% if not review[4] %}
+                        {{review[3]}}
+                     {% else %}
+                        {{review[4]}}
+                     {% endif %}
+        </div></div>
+    <div class="row"><div class="col"><h5>Rating></h5>
+                </div><div class="col"><div class="ratings">
+    <div class="empty-stars"></div>
+    <div class="full-stars" style="width:{{review[0] * 20}}%"></div>
+    </div></div></div>
+    <br>
+    <div class="row"><p>{{review[2]}}</p></div>
+</article>
+
+{% endblock %}

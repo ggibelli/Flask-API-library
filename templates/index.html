@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    My Reviews
+{% endblock %}
+
+{% block main %}
+
+    <ul>
+        {% for review in reviews %}
+        <li>Book title: <a href="{{ url_for('books', isbn=review[5]) }}">{{review[3]}}</a>,
+            Review title: <a href="{{ url_for('review', isbn=review[5], review_id= review[0]) }}">{{review[1]}}</a>,
+            created on: {{review[2]}} o modificato alle!!!
+            <a class="edit" href="{{ url_for('update', isbn=review[5], review_id= review[0]) }}">Edit</a>
+        </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

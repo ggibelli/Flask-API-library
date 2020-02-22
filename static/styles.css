@@ -1,0 +1,128 @@
+
+h1 {
+  color: #f7f7f7;
+  font-family: Impact, Charcoal, sans-serif;
+  font-weight: bold;
+}
+
+body {
+  background: #006994 !important;
+}
+
+#page-content {
+  flex: 1 0 auto;
+}
+
+p {
+  font-family: "Arial Black", Gadget, sans-serif;
+}
+
+
+h2 {
+  color: #f7f7f7;
+  font-family: Impact, Charcoal, sans-serif;
+}
+
+.nav-item {
+  color: #292b2c;
+  font-family: Impact, Charcoal, sans-serif;
+  font-size: 1.25em;
+}
+
+.nav-item:hover {
+  color: #f7f7f7 !important;
+  font-family: Impact, Charcoal, sans-serif;
+}
+
+
+
+.active {
+  color: #f7f7f7 !important;
+}
+
+/*# sourceMappingURL=styles.css.map */
+
+
+.ratings {
+    position: relative;
+    vertical-align: middle;
+    display: inline-block;
+    color: #b1b1b1;
+    overflow: hidden;
+}
+.full-stars {
+    position: absolute;
+    left: 0;
+    top: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    color: #fde16d;
+}
+.empty-stars:before, .full-stars:before {
+    content:"\2605\2605\2605\2605\2605";
+    font-size: 14pt;
+}
+.empty-stars:before {
+    -webkit-text-stroke: 1px #848484;
+}
+.full-stars:before {
+    -webkit-text-stroke: 1px orange;
+}
+
+#message {
+  display:none;
+  background: #f1f1f1;
+  color: #000;
+  position: relative;
+  padding: 20px;
+  margin-top: 10px;
+}
+
+#message p {
+  padding: 10px 35px;
+  font-size: 18px;
+}
+
+/* Add a green text color and a checkmark when the requirements are right */
+.valid {
+  color: green;
+}
+
+.valid:before {
+  position: relative;
+  left: -35px;
+  content: ' \2705';
+}
+
+/* Add a red text color and an "x" icon when the requirements are wrong */
+.invalid {
+  color: red;
+}
+
+.invalid:before {
+  position: relative;
+  left: -35px;
+  content: ' \274C';
+}
+
+main table
+{
+    /* left-align contents */
+    text-align: left;
+}
+
+main tfoot
+{
+    /* boldface tables' footers */
+    font-weight: bold;
+}
+
+#preview{
+  line-height:1.2em;
+  height:3.6em;
+  overflow:hidden;
+}
+
+.edit {
+    text-align: right;
+}
