@@ -1,0 +1,111 @@
+$textcolor: #f7f7f7;
+$backgroundcolor: #006994;
+
+body {
+    background: $backgroundcolor;
+  }
+  
+  .container-fluid {
+    background: $backgroundcolor;
+  }
+  
+  p {
+    font-family: "Arial Black", Gadget, sans-serif;
+  }
+  
+  .nav-item {
+    color: #292b2c;
+    font-family: Impact, Charcoal, sans-serif;
+    font-size: 1.25em;
+  }
+  
+  .nav-item:hover {
+    color: $textcolor;
+    font-family: Impact, Charcoal, sans-serif;
+  }
+  
+  .active {
+    color: $textcolor;
+  }
+  
+  .ratings {
+      position: relative;
+      vertical-align: middle;
+      display: inline-block;
+      color: #b1b1b1;
+      overflow: hidden;
+  }
+  
+  .full-stars {
+      position: absolute;
+      left: 0;
+      top: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      color: #fde16d;
+  }
+  
+  .empty-stars:before, .full-stars:before {
+      content:"\2605\2605\2605\2605\2605";
+      font-size: 1.15rem;
+  }
+  
+  .empty-stars:before {
+      -webkit-text-stroke: 1px #848484;
+  }
+  
+  .full-stars:before {
+      -webkit-text-stroke: 1px orange;
+  }
+  
+  #message {
+    display:none;
+    background: $textcolor;
+    color: #000;
+    position: relative;
+    padding: 1rem;
+    margin-top: 0.5rem;
+  }
+  
+  #message {
+      p {
+        padding: 0.5rem 1.5rem;
+        font-size: 1rem;
+      }
+  }
+  
+  /* Add a green text color and a checkmark when the requirements are right */
+  .valid {
+    color: green;
+  }
+  
+  .valid:before {
+    position: relative;
+    left: -2rem;
+    content: ' \2705';
+  }
+  
+  /* Add a red text color and an "x" icon when the requirements are wrong */
+  .invalid {
+    color: red;
+  }
+  
+  .invalid:before {
+    position: relative;
+    left: -2rempx;
+    content: ' \274C';
+  }
+  
+  #preview{
+    line-height:1.2em;
+    height:3.6em;
+    overflow:hidden;
+  }
+  
+  .edit {
+      text-align: right;
+  }
+
+
+  
+  

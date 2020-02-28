@@ -5,21 +5,30 @@
 {% endblock %}
 
 {% block main %}
-    <form action="/register" method="post">
+<div class="container-fluid p-4">
+
+    <form action="/register" method="post" class="needs-validation" novalidate>
+      
         <div class="form-group">
-            <input autocomplete="off" autofocus class="form-control" name="username" placeholder="Username" type="text">
+            <input id="checkuser" autocomplete="off" autofocus class="form-control" name="username" placeholder="username" type="text" onkeyup="check_username();" value required>
+            <small id="username_status"></small>
         </div>
         <div class="form-group">
-            <input autocomplete="off" autofocus class="form-control" name="email" placeholder="email" type="email">
+            <input id="checkmail" autocomplete="off" autofocus class="form-control" name="email" placeholder="email" type="email" onkeyup="check_email();">
+            <small id="email_status"></small>
         </div>
         <div class="form-group">
             <input class="form-control" name="password" id="password" placeholder="Password" type="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" required>
-        </div>
+            <small style="color:rgb(189, 189, 189);" id="passwordHelpBlock" class="form-text">
+              Your password must be 8-20 characters long, contain  at least 1 capital letter and 1 number, and must not contain spaces, special characters, or emoji.
+            </small>
+          </div>
         <div class="form-group">
             <input class="form-control" name="confirmation" placeholder="Retype password" type="password">
         </div>
         <button class="btn btn-primary" type="submit">Register</button>
     </form>
+</div>
 
     <div id="message">
         <h3>Password must contain the following:</h3>
@@ -30,6 +39,40 @@
     </div>
 
     <script>
+        function check_username() {
+            var username = document.getElementById("checkuser").value;
+            var label = document.getElementById("username_status");
+
+            $.get("/checkuser?username=" + username, function (data) {
+                if (data == true) {
+                    label.innerHTML = "Username available";
+                } else {
+                    label.innerHTML = "Username taken";
+                    event.preventDefault();
+                }
+            if (!username) {
+                label.innerHTML = "";
+                }
+            })
+        }
+
+
+        function check_email() {
+            var email = document.getElementById("checkmail").value;
+            var label = document.getElementById("email_status");
+            $.get("/checkmail?email=" + email, function (data) {
+                if (data == true) {
+                    label.innerHTML = "Email available";
+                } else {
+                    label.innerHTML = "Email taken";
+                    event.preventDefault();
+                }
+            if (!email) {
+                label.innerHTML = "";
+                }
+            })
+        }
+
         var myInput = document.getElementById("password");
         var letter = document.getElementById("letter");
         var capital = document.getElementById("capital");

@@ -6,21 +6,20 @@
 
 {% block main %}
 
-<article class="container-fluid p-3 mb-2 bg-dark text-white">
-    <div class="row"><div class="col"><h1>{{review[2]}}</h1></div>
-    <div class="col">{% if not review[4] %}
-                        {{review[3]}}
-                     {% else %}
-                        {{review[4]}}
-                     {% endif %}
-        </div></div>
-    <div class="row"><div class="col"><h5>Rating></h5>
-                </div><div class="col"><div class="ratings">
-    <div class="empty-stars"></div>
-    <div class="full-stars" style="width:{{review[0] * 20}}%"></div>
-    </div></div></div>
-    <br>
-    <div class="row"><p>{{review[2]}}</p></div>
-</article>
+<div class="container-fluid p-4 text-white">
+    <div class="d-flex w-100 justify-content-between">
+            <h4 class="mb-1">{{review[2]}}</h4>
+            <small>Last edit {{timereview}} ago</small>
+    </div>
+    <div class="d-flex w-100 justify-content-between">
+        <span class="ratings">
+            <span class="empty-stars"></span>
+            <span class="full-stars" style="width:{{review[0] * 20}}%"></span>
+        </span>
+    </div>
+    <p class="mb-1">{{review[1]}}</p>
+    <small>Reviewed by {{review[5]}}</small>
+</div>
+
 
 {% endblock %}

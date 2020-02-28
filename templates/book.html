@@ -5,43 +5,133 @@
 {% endblock %}
 
 {% block main %}
+<div class="container-fluid p-4 text-white">
+  <div class="row">
+    <div class="col-sm">
+      <div class="row"><div class="col"><h1>{{book[2]}}</h1></div></div>
+      <div class="row"><div class="col"><h2>by {{book[3]}}</h2></div></div>
+      <div class="row"><div class="col"><h4>written in {{book[4]}}</h4></div></div>
+      <div class="row"><div class="col"><h4>ISBN: {{book[1]}}</h4></div></div>
+      <hr>
+      <div class="row"><div class="col">Average rating by "GoodRead":
+        <span class="ratings">
+        <span class="empty-stars"></span>
+        <span class="full-stars" style="width:{{percentagereview}}%"></span>
+        </span></div></div>
+      <div class="row"><div class="col">Numbers of raters by "GoodRead": {{goodreads['books'][0]['ratings_count']}}</div></div>
+      <br>
+      <div class="row"><div class="col">Average rating by us:
+        <span class="ratings">
+        <span class="empty-stars"></span>
+        <span class="full-stars" style="width:{% if myavgreview[0] %}
+          {{ '{}%'.format(myavgreview[0] * 20) }}
+          {% else %}
+          0%
+          {% endif %}"></span>
+        </span></div></div>
+      <div class="row"><div class="col">Numbers of raters here: {{myreviewers[0]}}</div></div>
+      <hr>
+    </div>
+    <div class="col-sm">
+      {% if reviews[0] %} <h2>Read other's people reviews</h2> {% endif %}
+      <div class="list-group">
+        {% for review in range(reviews| length) %}
+        <a href="{{ url_for('review', isbn=book[1], review_id= reviews[review][1]) }}" class="list-group-item list-group-item-action flex-column align-items-start ">
+          <div class="d-flex w-100 justify-content-between">
+            <span class="ratings">
+              <span class="empty-stars"></span>
+              <span class="full-stars" style="width:{{reviews[review][4] * 20}}%"></span>
+            </span>
+            <h5 class="mb-1">{{reviews[review][0]}}</h5>
+            <small class="text-muted">Last edit: {{list_time[review]}} ago</small>
+          </div>
+          <p id="preview" class="mb-1">{{reviews[review][3]}}</p>
+          <small class="text-muted">Reviewed by {{reviews[review][2]}}</small>
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
 
-<article class="container-fluid p-3 mb-2 bg-dark text-white col-10">
-    <div class="row"><div class="col"><h1>{{book[2]}}</h1></div></div>
-    <div class="row"><div class="col"><h2>by {{book[3]}}</h2></div></div>
-    <div class="row"><div class="col"><h4>written in {{book[4]}}</h4></div></div>
-    <div class="row"><div class="col"><h4>ISBN: {{book[1]}}</h4></div></div>
-    <br>
-    <div class="row"><div class="col"><h5>Average ratings></h5>
-                </div><div class="col"><div class="ratings">
-    <div class="empty-stars"></div>
-    <div class="full-stars" style="width:{{percentagereview}}%"></div>
-    </div></div></div>
+    {% if show_edit %}
+    <div class="row">
+        <div class="col">
+            <hr>
+            
 
+            <form class="needs-validation" novalidate action ="{{ url_for('books',isbn=book[1]) }}" method="post">
+              <div class="form-row">
+                <div class="col-md-4 mb-3">
+                  <label for="validationCustom01">Title</label>
+                  <input name="title" type="text" class="form-control" id="validationCustom01" required>
+                  <div class="valid-feedback">
+                    Looks good!
+                  </div>
+                </div>              
+              </div>
+              <div class="form-row">
+                <div class="col-md-6 mb-3">
+                  <label for="validationCustom02">Review</label>
+                  <textarea name="review" type="text" class="form-control" id="validationCustom02" rows="5" required></textarea>
+                  <div class="valid-feedback">
+                    Looks good!
+                  </div>
+                </div> 
+              </div>
+              Rating
+              <div class="form-row">
+                <div class="col-md-6 mb-3">
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="rating" value="5" required>
+                    <label class="form-check-label" title="Very good!">★★★★★</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="rating" value="4" required>
+                    <label class="form-check-label" title="Nice!">★★★★</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="rating" value="3" required>
+                    <label class="form-check-label" title="Ok...">★★★</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="rating" value="2" required>
+                    <label class="form-check-label" title="Not very nice">★★</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="rating" value="1" required>
+                    <label class="form-check-label" title="Avoid..">★</label>
+                    <div class="invalid-feedback" style="margin-left: 1em">Please rate</div>
+                  </div>
+                </div>
+              </div>
+              <button class="btn btn-primary" type="submit">Submit form</button>
+            </form>
+            
+            <script>
+            // Example starter JavaScript for disabling form submissions if there are invalid fields
+            (function() {
+              'use strict';
+              window.addEventListener('load', function() {
+                // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                var forms = document.getElementsByClassName('needs-validation');
+                // Loop over them and prevent submission
+                var validation = Array.prototype.filter.call(forms, function(form) {
+                  form.addEventListener('submit', function(event) {
+                    if (form.checkValidity() === false) {
+                      event.preventDefault();
+                      event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                  }, false);
+                });
+              }, false);
+            })();
+            </script>                
+            
+        </div>
+    </div>
+    {% endif %}
+  </div>
 
-
-
-    <div class="row"><div class="col"><h5>Numbers of raters by "GoodRead": {{goodreads['books'][0]['ratings_count']}}</h5></div></div>
-    {% for row in reviews %}
-    <p id="preview">{{row[0]}}</p>
-    {% endfor %}
-
-    <form action ="{{ url_for('books',isbn=book[1]) }}" method="post" >
-    <fieldset class="rating">
-    <legend>Please rate:</legend>
-    <input type="radio" id="star5" name="rating" value="5" /><label for="star5" title="Rocks!">5 stars</label>
-    <input type="radio" id="star4" name="rating" value="4" /><label for="star4" title="Pretty good">4 stars</label>
-    <input type="radio" id="star3" name="rating" value="3" /><label for="star3" title="Meh">3 stars</label>
-    <input type="radio" id="star2" name="rating" value="2" /><label for="star2" title="Kinda bad">2 stars</label>
-    <input type="radio" id="star1" name="rating" value="1" /><label for="star1" title="Sucks big time">1 star</label>
-    </fieldset>
-    <label for="title">Title</label>
-    <input name="title" id="title" value=required>
-    <label for="body">Body</label>
-    <textarea name="review" id="body"></textarea>
-    <input type="submit" value="Save">
-    </form>
-
-</article>
 
 {% endblock %}

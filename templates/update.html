@@ -5,31 +5,89 @@
 {% endblock %}
 
 {% block main %}
+<div class="container-fluid p-4 bg-dark text-white">
+  <div class="row">
+    <div class="col-sm">
+      <form class="needs-validation" novalidate method="post">
+          <div class="form-row">
+            <div class="col-md-4 mb-3">
+              <label for="validationCustom01">Title</label>
+              <input name="title" type="text" class="form-control" id="validationCustom01" value="{{ request.form['review_title'] or review[2] }}" required>
+              <div class="valid-feedback">
+                Looks good!
+              </div>
+            </div>              
+          </div>
+          <div class="form-row">
+            <div class="col-md-12 mb-3">
+              <label for="validationCustom02">Review</label>
+              <textarea name="review" type="text" class="form-control" id="validationCustom02" required>{{ request.form['review'] or review[1] }}</textarea>
+              <div class="valid-feedback">
+                Looks good!
+              </div>
+            </div> 
+          </div>
+          Rating
+          <div class="form-row">
+            <div class="col-md-6 mb-3">
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="rating" value="5" required {{checked[5]}}>
+                <label class="form-check-label" title="Very good!">★★★★★</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="rating" value="4" required{{checked[4]}}>
+                <label class="form-check-label" title="Nice!">★★★★</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="rating" value="3" required {{checked[3]}}>
+                <label class="form-check-label" title="Ok...">★★★</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="rating" value="2" required {{checked[2]}}>
+                <label class="form-check-label" title="Not very nice">★★</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="rating" value="1" required {{checked[1]}}>
+                <label class="form-check-label" title="Avoid..">★</label>
+                <div class="invalid-feedback" style="margin-left: 1em">Please rate</div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+          <button class="btn btn-primary left" type="submit">Save</button></div>
+          <div class="col text-right">
+          <form action="{{ url_for('delete', isbn=isbn, review_id = review_id) }}" method="post">
+            <button class="danger btn btn-primary right" type="submit" value="Delete" onclick="return confirm('Are you sure?');">Delete</button>
+          </form>
+        </div>
+        </div>
+        </form>
+        <hr>
+      </div>
+    </div>
+  </div>
 
-    <form method="post">
-    <label for="title">Title</label>
-    <input name="review_title" id="title"
-      value="{{ request.form['review_title'] or review[2] }}" required>
-    <label for="body">Body</label>
-    <textarea name="review" id="body">{{ request.form['review'] or review[1] }}</textarea>
-    <fieldset class="rating">
-    <legend>Please rate:</legend>
-    <input type="radio" id="star5" name="rating" value="5" {{checked[5]}}/>
-        <label for="star5" title="Rocks!">5 stars</label>
-    <input type="radio" id="star4" name="rating" value="4" {{checked[4]}}/>
-        <label for="star4" title="Pretty good">4 stars</label>
-    <input type="radio" id="star3" name="rating" value="3" {{checked[3]}}/>
-        <label for="star3" title="Meh">3 stars</label>
-    <input type="radio" id="star2" name="rating" value="2" {{checked[2]}}/>
-        <label for="star2" title="Kinda bad">2 stars</label>
-    <input type="radio" id="star1" name="rating" value="1" {{checked[1]}}/>
-        <label for="star1" title="Sucks big time">1 star</label>
-    </fieldset>
-        <input type="submit" value="Save">
-  </form>
-  <hr>
-  <form action="{{ url_for('delete', isbn=isbn, review_id = review_id) }}" method="post">
-    <input class="danger" type="submit" value="Delete" onclick="return confirm('Are you sure?');">
-  </form>
+  
+  <script>
+  // Example starter JavaScript for disabling form submissions if there are invalid fields
+  (function() {
+    'use strict';
+    window.addEventListener('load', function() {
+      // Fetch all the forms we want to apply custom Bootstrap validation styles to
+      var forms = document.getElementsByClassName('needs-validation');
+      // Loop over them and prevent submission
+      var validation = Array.prototype.filter.call(forms, function(form) {
+        form.addEventListener('submit', function(event) {
+          if (form.checkValidity() === false) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+          form.classList.add('was-validated');
+        }, false);
+      });
+    }, false);
+  })();
+  </script>                
 
 {% endblock %}
