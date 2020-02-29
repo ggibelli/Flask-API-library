@@ -6,6 +6,9 @@
 
 {% block main %}
     <div class="container-fluid p-4">
+      {% if not reviews[0] %}
+      <h5>No reviews yet!</h5>
+      {% endif %}
         {% for review in range(reviews| length) %}
         <div class="row">
             <div class="col">
