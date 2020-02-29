@@ -33,6 +33,8 @@ db = scoped_session(sessionmaker(bind=engine))
 now = datetime.now()
 timenow = now.strftime("%d/%m/%Y %H:%M:%S")
 
+
+# Formatting time elapsed from last edit
 def deltastr(now, created, updated):
     if updated:
         delta = str(now - updated).split(".", 2)[0]
@@ -48,6 +50,8 @@ def deltastr(now, created, updated):
         else:
             return(delta[0] + " hours")
 
+
+# Index function that shows the reviews the user made
 @app.route("/")
 @login_required
 def index():
@@ -62,6 +66,7 @@ def index():
     return render_template("index.html", reviews = reviews, list_time = list_time)
 
 
+# Registration with hashing of password
 @app.route("/register", methods=["GET", "POST"])
 def register():
     """Register user"""
@@ -72,16 +77,21 @@ def register():
         password = request.form.get("password")
         email = request.form.get("email")
         confirmation = request.form.get("confirmation")
+
         if not username:
             return apology("You must provide a username")
+
         elif db.execute("SELECT user_id FROM users WHERE username = :username",
                         {"username": username}).fetchone() is not None:
             return apology("Username already exists")
+
         elif db.execute("SELECT user_id FROM users WHERE email = :email",
                         {"email": email}).fetchone() is not None:
             return apology("Email already exists")
+
         elif not password or password != confirmation:
             return apology("You must provide a password")
+
         elif password == confirmation:
             hashpassword = generate_password_hash(password)
             db.execute(
@@ -93,6 +103,7 @@ def register():
             return redirect("/")
 
 
+# Login function
 @app.route("/login", methods=["GET", "POST"])
 def login():
     """Log user in"""
@@ -111,8 +122,10 @@ def login():
 
         if user is None:
             return apology("invalid username", 403)
+
         elif not check_password_hash(user[2], password):
             return apology("invalid password", 403)
+
         if error is None:
             session.clear()
             session["user_id"] = user[0]
@@ -122,6 +135,7 @@ def login():
         return render_template("login.html")
 
 
+# Logout function
 @app.route("/logout")
 @login_required
 def logout():
@@ -134,11 +148,13 @@ def logout():
     return redirect("/")
 
 
+# Search function, simple and advanced using ILIKE query
 @app.route("/search", methods=["GET", "POST"])
 @login_required
 def search():
     if request.method == "GET":
         return render_template("search.html")
+
     else:
         if request.form.get("searchsimple"):
             searchsimple = "%" + request.form.get("searchsimple").replace(" ", "%") + "%"
@@ -154,11 +170,13 @@ def search():
         return render_template("books.html", results = results)
 
 
+# Goodread API function
 def goodread(isbn):
     return requests.get("https://www.goodreads.com/book/review_counts.json",
                  params={"key": "hoRUeTOzPq7YGVYPD555Qg", "isbns": isbn}).json()
 
 
+# Book page function
 @app.route("/books/<string:isbn>", methods=["GET", "POST"])
 @login_required
 def books(isbn):
@@ -174,8 +192,10 @@ def books(isbn):
         myreviewers = db.execute(
             "SELECT COUNT (rating) FROM reviews INNER JOIN books ON reviews.book_id = books.book_id WHERE isbn = :isbn",
             {"isbn": isbn}).fetchone()
+
         if book is None:
             return apology("Book not found", 404)
+
         reviews = db.execute("SELECT review_title, review_id, username, review, rating, created, updated, reviews.user_id"
                              " FROM reviews JOIN users ON users.user_id = reviews.user_id WHERE book_id = :book_id",
                              {"book_id": book[0]}).fetchall()
@@ -188,16 +208,20 @@ def books(isbn):
         return render_template("book.html", book = book, reviews = reviews,
                                goodreads = goodreads, percentagereview = percentagereview, show_edit = show_edit,
                                myavgreview = myavgreview, myreviewers = myreviewers, list_time = list_time)
+    
     else:
         title = request.form.get("title")
         if title is None:
             return apology("Each field is required")
+
         review = request.form.get("review")
         if review is None:
             return apology("Each field is required")
+
         rating = request.form.get("rating")
         if rating is None:
             return apology("Each field is required")
+
         db.execute(
             "INSERT INTO reviews (rating, user_id, book_id, review, created, review_title) VALUES "
             "(:rating, :user_id, :book_id, :review, :created, :review_title)",
@@ -208,6 +232,7 @@ def books(isbn):
         return redirect("/")
 
 
+# Review page function
 @app.route("/books/<string:isbn>/<int:review_id>")
 @login_required
 def review(isbn, review_id):
@@ -217,9 +242,11 @@ def review(isbn, review_id):
     timereview = deltastr(now, review[3], review[4])
     if not review:
         return apology("Review not found", 404)
+
     return render_template("review.html", review = review, review_id = review_id, timereview = timereview)
 
 
+# Review update function
 @app.route("/books/<string:isbn>/<int:review_id>/update", methods=["GET", "POST"])
 @login_required
 def update(isbn, review_id):
@@ -235,6 +262,7 @@ def update(isbn, review_id):
         if review[5] != user_id:
             return apology("not authorized", 403)
         return render_template("update.html", review = review, review_id = review_id, isbn = isbn, checked = checked)
+    
     else:
         review = request.form.get("review")
         rating = request.form.get("rating")
@@ -248,6 +276,7 @@ def update(isbn, review_id):
         return redirect("/")
 
 
+# Review delete function
 @app.route("/books/<string:isbn>/<int:review_id>/delete", methods=["POST"])
 @login_required
 def delete(isbn, review_id):
@@ -257,6 +286,7 @@ def delete(isbn, review_id):
     user_id = session["user_id"]
     if check_user[0] != user_id:
         return apology("not authorized", 403)
+
     db.execute(
         "DELETE FROM reviews WHERE review_id = :review_id",
         {"review_id": review_id}
@@ -265,6 +295,7 @@ def delete(isbn, review_id):
     return redirect("/")
 
 
+# API function
 @app.route("/api/<string:isbn>")
 @login_required
 def api(isbn):
@@ -287,8 +318,8 @@ def api(isbn):
     })
 
 
+# AJAX checkuser helper
 def checkDB(value):
-
     check_value = db.execute("SELECT username FROM users WHERE username =:value OR email = :value", {"value": value}).fetchone()
     if not check_value:
         return True
@@ -296,6 +327,7 @@ def checkDB(value):
         return False
 
 
+# AJAX checkuser function
 @app.route("/checkuser", methods=["GET"])
 def checkuser():
     """Return true if username available, else false, in JSON format"""
@@ -303,6 +335,7 @@ def checkuser():
     return jsonify(checkDB(username))
 
 
+# AJAX checkmail function
 @app.route("/checkmail", methods=["GET"])
 def checkmail():
     """Return true if email available, else false, in JSON format"""
@@ -310,6 +343,7 @@ def checkmail():
     return jsonify(checkDB(email))
 
 
+# Handle error function
 def errorhandler(e):
     """Handle error"""
     if not isinstance(e, HTTPException):
