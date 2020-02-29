@@ -177,7 +177,7 @@ def books(isbn):
         if book is None:
             return apology("Book not found", 404)
         reviews = db.execute("SELECT review_title, review_id, username, review, rating, created, updated, reviews.user_id"
-                             "FROM reviews JOIN users ON users.user_id = reviews.user_id WHERE book_id = :book_id",
+                             " FROM reviews JOIN users ON users.user_id = reviews.user_id WHERE book_id = :book_id",
                              {"book_id": book[0]}).fetchall()
         for review in reviews:
             list_time.append(deltastr(now, review[5], review[6]))
