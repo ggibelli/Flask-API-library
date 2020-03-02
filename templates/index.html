@@ -1,42 +1,61 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    My Reviews
+    Home
 {% endblock %}
 
 {% block main %}
-    <div class="container-fluid p-4 text-white">
-      {% if not reviews[0] %}
-      <div class="row">
-        <div class="col">
-           <h5>No reviews yet!</h5>
+<div class="container-fluid p-4 text-white">
+    <h3>Welcome, {{ username[0] }}</h3>
+    <hr>
+    <div class="row">
+        <div class="col-sm">
+            <h4>Top 10 books sorted by average rating:</h4>
+            <table class="table table-sm table-hover table-borderless text-white">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>Avg. Rating</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for book in top_books_rating %}
+                    <tr tr style="transform: rotate(0);">
+                        
+                        <td><a style="color:aliceblue;" href="{{ url_for('books', isbn=book[2]) }}" class="stretched-link">{{book[0]}}</a></td>
+                        <td>{{book[3]}}</td>
+                        <td>{{book[1]}}</td>
+                    </tr>
+                    {% endfor %}
+
+                </tbody>
+            </table>
         </div>
-      </div>
-      {% endif %}
-        {% for review in range(reviews| length) %}
-        <div class="row">
-            <div class="col">
-                <div class="list-group">
-                    <a href="{{ url_for('update', isbn=reviews[review][5], review_id= reviews[review][0]) }}" class="list-group-item list-group-item-action flex-column align-items-start ">
-                      <div class="d-flex w-100 justify-content-between">
-                        <h4 class="mb-1">{{reviews[review][3]}}, {{reviews[review][4]}}</h4>
-                        <span class="ratings">
-                          <span class="empty-stars"></span>
-                          <span class="full-stars" style="width:{{reviews[review][8] * 20}}%"></span>
-                        </span>
-                      </div>
-                      <div class="d-flex w-100 justify-content-between">
-                        <h5 class="mb-1">{{reviews[review][1]}}</h5>
-                        <small class="text-muted">Last edit: {{list_time[review]}} ago</small>                       
-                      </div>
-                      
-                      <p id="preview" class="mb-1">{{reviews[review][6]}}</p>
-                      <small class="text-muted">Click to edit review</small>
-                    </a>
-                    
-                  </div>
-            </div>
+        <div class="col-sm">
+            <h4>Top 10 books by number of reviews:</h4>
+            <table class="table table-sm table-hover table-borderless text-white">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>N. Reviews</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for book in top_books_reviews %}
+                    <tr tr style="transform: rotate(0);">
+                        
+                        <td><a style="color:aliceblue;" href="{{ url_for('books', isbn=book[2]) }}" class="stretched-link">{{book[0]}}</a></td>
+                        <td>{{book[3]}}</td>
+                        <td>{{book[1]}}</td>
+
+
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
-        {% endfor %}
     </div>
+</div>
 {% endblock %}

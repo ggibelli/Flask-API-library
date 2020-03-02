@@ -51,10 +51,11 @@ def deltastr(now, created, updated):
             return(delta[0] + " hours")
 
 
-# Index function that shows the reviews the user made
-@app.route("/")
+
+# Function that shows the user's reviews
+@app.route("/myreviews")
 @login_required
-def index():
+def myreviews():
     user_id = session["user_id"]
     list_time = list()
     reviews = db.execute("SELECT review_id, review_title, created, title, author, isbn, review, updated, rating FROM reviews "
@@ -63,7 +64,24 @@ def index():
     for review in reviews:
         list_time.append(deltastr(now, review[2], review[7]))
         
-    return render_template("index.html", reviews = reviews, list_time = list_time)
+    return render_template("myreviews.html", reviews = reviews, list_time = list_time)
+
+
+
+# Index function that shows the top books by rating and reviews
+@app.route("/")
+@login_required
+def index():
+    user_id = session["user_id"]
+    username = db.execute("SELECT username FROM users WHERE user_id = :user_id", {"user_id": user_id}).fetchone()
+    top_books_rating = db.execute("SELECT books.title, AVG(reviews.rating), books.isbn, books.author FROM books JOIN reviews "
+                                  "ON books.book_id = reviews.book_id GROUP BY books.title, books.isbn, books.author ORDER BY 2 desc "
+                                  "LIMIT 10").fetchall()
+    top_books_reviews = db.execute("SELECT books.title, COUNT(reviews.rating), books.isbn, books.author FROM books JOIN reviews "
+                                  "ON books.book_id = reviews.book_id GROUP BY books.title, books.isbn, books.author ORDER BY 2 desc "
+                                  "LIMIT 10").fetchall()
+    return render_template("index.html", top_books_rating = top_books_rating, 
+                            top_books_reviews = top_books_reviews, username = username)
 
 
 # Registration with hashing of password
@@ -266,13 +284,14 @@ def update(isbn, review_id):
     else:
         review = request.form.get("review")
         rating = request.form.get("rating")
-        review_title = request.form.get("review_title")
+        review_title = request.form.get("title")
         db.execute(
             "UPDATE reviews SET rating = :rating, review = :review, review_title = :review_title, updated = :updated "
             "WHERE review_id = :review_id",
             {"rating": rating, "review": review, "review_title": review_title, "updated": now, "review_id": review_id}
         )
         db.commit()
+        flash("Review updated")
         return redirect("/")
 
 
@@ -342,6 +361,12 @@ def checkmail():
     email = request.args.get("email")
     return jsonify(checkDB(email))
 
+
+# Show html page with API instruction
+@app.route("/api_info", methods=["GET"])
+@login_required
+def api_info(): 
+    return render_template("api_info.html")
 
 # Handle error function
 def errorhandler(e):
