@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Information API
+{% endblock %}
+
+{% block main %}
+<div class="container-fluid p-4 text-white">
+    <p>
+        {% raw %}
+        How to access the API: <br> If you make a GET request to my https://project1-cs50w-giovanni.herokuapp.com/api/isbn, where isbn is an ISBN number, 
+            my website is gonna return a JSON response containing the book’s title, author, publication date, ISBN number, review count, 
+            and average score. The resulting JSON  follow the format:
+            <br>
+            {<br>
+                "title": "Memory",<br>
+                "author": "Doug Lloyd",<br>
+                "year": 2015,<br>
+                "isbn": "1632168146",<br>
+                "review_count": 28,<br>
+                "average_score": 5.0<br>
+            }<br>
+        {% endraw %}
+    </p>
+</div>
+{% endblock %}
