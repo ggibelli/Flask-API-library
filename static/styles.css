@@ -56,44 +56,8 @@ p {
   -webkit-text-stroke: 1px orange;
 }
 
-#message {
-  display: none;
-  background: #f7f7f7;
-  color: #000;
-  position: relative;
-  padding: 1rem;
-  margin-top: 0.5rem;
-}
-
-#message p {
-  padding: 0.5rem 1.5rem;
-  font-size: 1rem;
-}
-
 input small {
   color: #f7f7f7;
-}
-
-/* Add a green text color and a checkmark when the requirements are right */
-.valid {
-  color: green;
-}
-
-.valid:before {
-  position: relative;
-  left: -2rem;
-  content: " ✅";
-}
-
-/* Add a red text color and an "x" icon when the requirements are wrong */
-.invalid {
-  color: red;
-}
-
-.invalid:before {
-  position: relative;
-  left: -2rempx;
-  content: " ❌";
 }
 
 #preview {
