@@ -8,6 +8,8 @@
 <div class="container-fluid p-4 bg-dark text-white">
   <div class="row">
     <div class="col-sm">
+      <form id="deleteform" action="{{ url_for('delete', isbn=isbn, review_id = review_id) }}" method="post"></form>
+        </form>
       <form class="needs-validation" novalidate method="post">
           <div class="form-row">
             <div class="col-md-4 mb-3">
@@ -57,12 +59,13 @@
             <div class="col">
           <button class="btn btn-primary left" type="submit">Save</button></div>
           <div class="col text-right">
-          <form action="{{ url_for('delete', isbn=isbn, review_id = review_id) }}" method="post">
-            <button class="danger btn btn-primary right" type="submit" value="Delete" onclick="return confirm('Are you sure?');">Delete</button>
-          </form>
+          
+            <button class="danger btn btn-primary right" form="deleteform" type="submit" value="Delete" onclick="return confirm('Are you sure?');">Delete</button>
+          
         </div>
         </div>
         </form>
+        
         <hr>
       </div>
     </div>

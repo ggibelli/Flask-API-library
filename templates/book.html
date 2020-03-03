@@ -38,13 +38,13 @@
         {% for review in range(reviews| length) %}
         <a href="{{ url_for('review', isbn=book[1], review_id= reviews[review][1]) }}" class="list-group-item list-group-item-action flex-column align-items-start ">
           <div class="d-flex w-100 justify-content-between">
-            <span class="ratings">
-              <span class="empty-stars"></span>
-              <span class="full-stars" style="width:{{reviews[review][4] * 20}}%"></span>
-            </span>
             <h5 class="mb-1">{{reviews[review][0]}}</h5>
             <small class="text-muted">Last edit: {{list_time[review]}} ago</small>
           </div>
+          <span class="ratings">
+            <span class="empty-stars"></span>
+            <span class="full-stars" style="width:{{reviews[review][4] * 20}}%"></span>
+          </span>
           <p id="preview" class="mb-1">{{reviews[review][3]}}</p>
           <small class="text-muted">Reviewed by {{reviews[review][2]}}</small>
         </a>
