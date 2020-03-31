@@ -117,6 +117,9 @@ def register():
                 {"username": username, "hashpassword": hashpassword, "email": email, "now": now}
             )
             db.commit()
+            # Enables autologin after registration
+            session["user_id"] = db.execute("SELECT user_id FROM users WHERE username = :username",
+                        {"username": username}).fetchone()[0]
             flash("Welcome")
             return redirect("/")
 
